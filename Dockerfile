@@ -13,6 +13,8 @@ RUN pip3 install -U pip
 COPY requirements.txt /requirements.txt
 RUN cd /
 RUN pip3 install -U -r requirements.txt
+RUN pip3 install flask
+RUN pip3 install flask_restful
 RUN mkdir /RadioPlayerV3
 WORKDIR /RadioPlayerV3
 COPY start.sh /start.sh

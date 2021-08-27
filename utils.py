@@ -223,7 +223,7 @@ class MusicPlayer(object):
             await self.edit_title()
         await sleep(2)
         while True:
-            if group_call.is_connected:
+            if CALL_STATUS.get(CHAT):
                 print("Succesfully Joined VC !")
                 break
             else:

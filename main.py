@@ -27,8 +27,6 @@ from pyrogram import Client, filters, idle
 from config import Config
 from utils import mp, USERNAME, FFMPEG_PROCESSES
 from pyrogram.raw import functions, types
-from user import USER
-from pyrogram.errors import FloodWait, UserAlreadyParticipant
 
 CHAT=Config.CHAT
 ADMINS=Config.ADMINS
@@ -45,17 +43,7 @@ if not os.path.isdir("./downloads"):
     os.makedirs("./downloads")
 async def main():
     async with bot:
-        try:
-            await mp.start_radio()
-            await USER.join_chat("AsmSafone")
-        except UserAlreadyParticipant:
-            return
-        except FloodWait as e:
-            await asyncio.sleep(e.x)
-            return
-        except Exception as e:
-            print(e)
-            pass
+        await mp.start_radio()
 
 def stop_and_restart():
     bot.stop()

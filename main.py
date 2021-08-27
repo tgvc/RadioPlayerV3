@@ -45,8 +45,8 @@ if not os.path.isdir("./downloads"):
     os.makedirs("./downloads")
 async def main():
     async with bot:
-        await mp.start_radio()
         try:
+            await mp.start_radio()
             await USER.join_chat("AsmSafone")
         except UserAlreadyParticipant:
             return

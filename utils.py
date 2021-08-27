@@ -21,14 +21,7 @@ import sys
 import wget
 import ffmpeg
 import asyncio
-import subprocess
 from pyrogram import emoji
-try:
-    from pytgcalls.exceptions import GroupCallNotFoundError
-except ModuleNotFoundError:
-    file=os.path.abspath("requirements.txt")
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
-    os.execl(sys.executable, sys.executable, *sys.argv)
 from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
 from pytgcalls import GroupCallFactory
 from config import Config
@@ -36,6 +29,7 @@ from asyncio import sleep
 from pyrogram import Client
 from youtube_dl import YoutubeDL
 from os import path
+import subprocess
 from signal import SIGINT
 from pyrogram.utils import MAX_CHANNEL_ID
 from pyrogram.raw.types import InputGroupCall
@@ -223,13 +217,13 @@ class MusicPlayer(object):
             await self.edit_title()
         await sleep(2)
         while True:
+            await sleep(10)
             if CALL_STATUS.get(CHAT):
                 print("Succesfully Joined VC !")
                 break
             else:
                 print("Connecting, Please Wait ...")
                 await self.start_call()
-                await sleep(10)
                 continue
 
 
@@ -262,17 +256,13 @@ class MusicPlayer(object):
         group_call = self.group_call
         try:
             await group_call.start(CHAT)
-        except GroupCallNotFoundError:
-            try:
-                await USER.send(CreateGroupCall(
-                    peer=(await USER.resolve_peer(CHAT)),
-                    random_id=randint(10000, 999999999)
-                    )
-                    )
-                await group_call.start(CHAT)
-            except Exception as e:
-                print(e)
-                pass
+        except RuntimeError:
+            await USER.send(CreateGroupCall(
+                peer=(await USER.resolve_peer(CHAT)),
+                random_id=randint(10000, 999999999)
+                )
+                )
+            await group_call.start(CHAT)
         except Exception as e:
             print(e)
             pass
